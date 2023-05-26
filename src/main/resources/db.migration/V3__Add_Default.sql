@@ -1,0 +1,1 @@
+ALTER TABLE categorybooks ALTER COLUMN type SET DEFAULT 'fiction'
