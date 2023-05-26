@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books Table</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand">Admin Page</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+                <a class="nav-link" href="/admin/users">Users</a>
+                <a class="nav-link" href="/admin/books">Books</a>
+                <a class="nav-link" href="/admin/books/create">Create book</a>
+                <a class="nav-link" href="/">Exit admin page</a>
+            </div>
+        </div>
+    </div>
+</nav>
+<!--== Start Product Tab Area Wrapper ==-->
+<section class="product-area product-tab-area" data-aos="fade-up" data-aos-duration="1000">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="product-tab-content">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="featured-product" role="tabpanel" aria-labelledby="featured-product-tab">
+                            <div class="row">
+                                <div class="col-12 col-sm-6 col-md-4 col-xl-3" th:each="book : ${books}">
+                                    <!-- Start Product Item -->
+                                    <div class="product-item">
+                                        <div class="product-thumb">
+                                            <a th:href="@{/admin/books/{id}/edit(id=${book.getId()})}">
+                                                <img th:src="@{/images/books/{image}(image=${book.getPathImage()})}" width="160px" height="200px" alt="BookShop" >
+                                            </a>
+                                        </div>
+                                        <div class="product-info">
+                                            <h4 class="title"><a th:text="${book.getName()}" th:href="@{/admin/books/{id}/edit(id=${book.getId()})}"></a></h4>
+                                        </div>
+                                    </div>
+                                    <!-- End Product Item -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+</html>
