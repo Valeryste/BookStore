@@ -5,6 +5,8 @@ import lombok.Data;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
+
 @Data
 @Entity
 @Table(name="Person")
@@ -41,6 +43,10 @@ public class Person {
     @OneToOne(mappedBy = "person",cascade = CascadeType.ALL)
     @JsonIgnore
     private Cart cart;
+
+
+    @OneToMany(mappedBy = "person")
+    private List<Order> orderList;
 
 
     @Override
