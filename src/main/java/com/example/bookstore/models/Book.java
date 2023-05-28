@@ -40,8 +40,13 @@ public class Book {
     @Column(name="path_image")
     private String pathImage;
 
-    @OneToMany(mappedBy="cart",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="book",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Cart_Book> cart_bookList;
+
+
+    @OneToMany(mappedBy="book",cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Order_Book> order_bookList;
 
 }
