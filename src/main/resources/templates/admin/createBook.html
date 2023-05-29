@@ -43,7 +43,7 @@
     </div>
     <div>
         <select th:field="*{category}" class="form-select" aria-label="Default select">
-            <option value="0" selected="">Select category book</option>
+            <option value="0">Select category book</option>
             <option th:each="category :${categorybooks}" th:value="${category.getId()}">
                 <p th:text="${category.getName()}">
             </option>

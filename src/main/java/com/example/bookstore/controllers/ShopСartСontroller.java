@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,12 +44,14 @@ public class ShopСartСontroller {
 
     @GetMapping("/updateTotalPriceCart")
     @ResponseBody
-    private int totalPriceCart(Principal principal){
+    private int totalPriceCart(HttpSession session,Principal principal){
         List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
 
         int totalPriceCart =cart_books.stream()
                 .mapToInt(Cart_Book::getTotalPrice)
                 .sum();
+
+        session.setAttribute("totalPriceOrder",totalPriceCart);//для страницы заказа
 
         return totalPriceCart;
     }
@@ -66,10 +69,10 @@ public class ShopСartСontroller {
     }
 
     @GetMapping("")
-    public String showCart(Model model,Principal principal){
+    public String showCart(Model model, Principal principal, HttpSession session){
         List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
 
-        int totalPriceCart = totalPriceCart(principal);
+        int totalPriceCart = totalPriceCart(session,principal);
         model.addAttribute("totalPriceCart", totalPriceCart);
 
         if(cart_books.isEmpty()){
@@ -77,8 +80,9 @@ public class ShopСartСontroller {
             return "main/cart";
         }
 
+        session.setAttribute("books",cart_books);
+        session.setAttribute("bookListType", "list1");
 
-    /*    model.addAttribute("totalPriceCart",totalPriceCart);*/
 
         model.addAttribute("cart_books",cart_books);
         return "main/cart";
@@ -114,11 +118,14 @@ public class ShopСartСontroller {
 
     @PostMapping("/update-quantity")
     @ResponseBody
-    public ResponseEntity<Cart_Book> updateCart_Book(@RequestParam("cart_book_id") int cart_book_id, @RequestParam("quantity") int quantity){
-
+    public ResponseEntity<Cart_Book> updateCart_Book(HttpSession session,@RequestParam("cart_book_id") int cart_book_id, @RequestParam("quantity") int quantity,Principal principal){
+        List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
         cart_bookService.updatedCart_Book(cart_book_id,quantity);
 
         Cart_Book cart_book = cart_bookService.findById(cart_book_id);
+
+        session.setAttribute("books",cart_books);
+        session.setAttribute("bookListType", "list1");
 
         return ResponseEntity.ok(cart_book);
     }

@@ -7,7 +7,6 @@ create table orders(
     cc_number varchar (50),
     cc_experation varchar (25),
     cvv int,
-    cost_order int,
     order_date timestamp,
     person_id int,
     FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE CASCADE

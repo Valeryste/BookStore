@@ -46,6 +46,7 @@ public class Person {
 
 
     @OneToMany(mappedBy = "person")
+    @JsonIgnore
     private List<Order> orderList;
 
 

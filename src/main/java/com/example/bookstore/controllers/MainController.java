@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -85,35 +87,38 @@ public class MainController {
     }
 
     @GetMapping("/book/{id}")
-    public String oneBooks(@PathVariable("id") int id, Model model){
-        model.addAttribute("book",bookService.findBookByID(id));
+    public String oneBooks(@PathVariable("id") int id, Model model, HttpSession session){
+
+        Book book = bookService.findBookByID(id);
+
+
+        model.addAttribute("book",book);
+
+        session.setAttribute("books", book);//сделал для того чтобы отправлять на страницу заказа
+        session.setAttribute("bookListType", "list2");
+        // и такое же сделал в кантроллере корзины
+
         return "main/book";
     }
 
     @GetMapping("/shop")
-    public String shop(@RequestParam(name = "category", required = false) String category, Model model){
+    public String shop(@RequestParam(name = "category", required = false) String category, Model model, HttpSession session){
         List<Book> bookList;
+
         if(category == null || category.isEmpty()){
             bookList = bookService.allBook();
-        }
-        else{
+        } else{
             bookList = bookService.bookByCategory(category);
         }
+
         List<CategoryBooks> categoryBooks=categoryBooksService.allCategoryBooks();
+
         model.addAttribute("books",bookList);
         model.addAttribute("categorybooks",categoryBooks);
-        return "main/shop";
-    }
 
-    @GetMapping("/{id}/order")
-    public String order(@PathVariable("id") int id,Model model,Principal principal){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(principal==null){
-            return "auth/login";
-        }
-        model.addAttribute("book",bookService.findBookByID(id));
-        model.addAttribute("person",authentication.getPrincipal());
-        return "main/order";
+
+
+        return "main/shop";
     }
 
     @GetMapping("/banned")
