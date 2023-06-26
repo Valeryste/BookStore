@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Controller
@@ -80,14 +79,6 @@ public class OrderController {
 
     }
 
-    @ModelAttribute("totalPriceOrder")
-    private Integer totalPriceCart(HttpSession session){
-
-        if(session.getAttribute("totalPriceOrder")==null) {
-            return null;
-        }
-        return (int) session.getAttribute("totalPriceOrder");
-    }
 
     @ModelAttribute("regions")
     public List<String> getRegions(){

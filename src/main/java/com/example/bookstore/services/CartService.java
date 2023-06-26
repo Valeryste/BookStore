@@ -40,10 +40,19 @@ public class CartService {
     }
 
 
+    @Transactional
     public void save(Cart cart){
         cartRepository.save(cart);
     }
 
 
+    @Transactional
+    public void changeTotalPriceCart(Cart cart){
+        List<Cart_Book> cart_books = cart.getCart_books();
+        int totalPriceCart =cart_books.stream()
+                .mapToInt(Cart_Book::getTotalPrice)
+                .sum();
+        cart.setTotalPriceCart(totalPriceCart);
+    }
 
 }

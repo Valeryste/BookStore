@@ -1,0 +1,1 @@
+alter table cart add column total_price_cart int default 0;

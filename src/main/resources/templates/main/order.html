@@ -171,7 +171,7 @@
                                         </div>
                                         <div class="shipping-total">
                                             <p class="total">Total</p>
-                                            <p class="price"><span class="usd">USD</span><a th:text="'$'+${totalPriceOrder}"></a></p>
+                                            <p class="price"><span class="usd">USD</span><a th:text="'$'+${cart_books.get(0).getCart().getTotalPriceCart()}"></a></p>
                                         </div>
                                     </div>
                                     <div th:if="${book}!=null">

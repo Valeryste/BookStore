@@ -220,7 +220,7 @@
                                         <tr class="order-total">
                                             <th>Total</th>
                                             <td>
-                                                <span id="total-price-cart" th:text="${totalPriceCart}"></span>
+                                                <span id="total-price-cart" th:text="${cart_books.get(0).getCart().getTotalPriceCart()}"></span>
                                             </td>
                                         </tr>
                                         </tbody>
@@ -341,6 +341,9 @@
 <!--=== Custom Js ===-->
 <script src="/js/custom.js"></script>
 
+
 <script src="/js/changeInputQuantity.js"></script>
+
+
 </body>
 </html>

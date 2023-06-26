@@ -26,4 +26,8 @@ public class Cart {
     @JsonIgnore
     private List<Cart_Book> cart_books;
 
+    @Column(name = "total_price_cart")
+    private int totalPriceCart;
+
+
 }

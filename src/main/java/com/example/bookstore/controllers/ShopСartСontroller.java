@@ -26,6 +26,7 @@ import java.util.Optional;
 @Controller
 @Slf4j
 @RequestMapping("/cart")
+
 public class ShopСartСontroller {
 
     private final CartService cartService;
@@ -42,19 +43,8 @@ public class ShopСartСontroller {
     }
 
 
-    @GetMapping("/updateTotalPriceCart")
-    @ResponseBody
-    private int totalPriceCart(HttpSession session,Principal principal){
-        List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
 
-        int totalPriceCart =cart_books.stream()
-                .mapToInt(Cart_Book::getTotalPrice)
-                .sum();
 
-        session.setAttribute("totalPriceOrder",totalPriceCart);//для страницы заказа
-
-        return totalPriceCart;
-    }
 
     @ModelAttribute("authPerson")
     private PersonDetails authPerson(Principal principal){
@@ -72,8 +62,6 @@ public class ShopСartСontroller {
     public String showCart(Model model, Principal principal, HttpSession session){
         List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
 
-        int totalPriceCart = totalPriceCart(session,principal);
-        model.addAttribute("totalPriceCart", totalPriceCart);
 
         if(cart_books.isEmpty()){
             model.addAttribute("cartEmpty",true);
@@ -116,16 +104,23 @@ public class ShopСartСontroller {
         return "redirect:/cart";
     }
 
+
     @PostMapping("/update-quantity")
     @ResponseBody
     public ResponseEntity<Cart_Book> updateCart_Book(HttpSession session,@RequestParam("cart_book_id") int cart_book_id, @RequestParam("quantity") int quantity,Principal principal){
-        List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
+
         cart_bookService.updatedCart_Book(cart_book_id,quantity);
+
+        List<Cart_Book> cart_books =  cart_bookService.findAll(authPerson(principal).getPerson().getCart());
+
 
         Cart_Book cart_book = cart_bookService.findById(cart_book_id);
 
+
+
         session.setAttribute("books",cart_books);
         session.setAttribute("bookListType", "list1");
+
 
         return ResponseEntity.ok(cart_book);
     }

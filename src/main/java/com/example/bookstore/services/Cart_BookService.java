@@ -38,14 +38,17 @@ public class Cart_BookService  {
         Optional<Cart_Book> cart_book = cart_bookRepository.findCart_BookByBookAndCart(book,cart);
 
         if(cart_book.isPresent()){
+
             int currentQuantity = cart_book.get().getQuantity();
             int newQuantity = currentQuantity + quantity;
 
             cart_book.get().setTotalPrice(newQuantity*book.getPrice());
 
+
             cart_book.get().setQuantity(newQuantity);
 
             cart_bookRepository.save(cart_book.get());
+
         } else{
             Cart_Book new_cart_book = new Cart_Book();
 
@@ -57,9 +60,8 @@ public class Cart_BookService  {
             log.info("cart_book:" + cart_book);
 
             cart_bookRepository.save(new_cart_book);
-
         }
-
+        cartService.changeTotalPriceCart(cart);
     }
     public List<Cart_Book> findAll(Cart cart){
         return cart_bookRepository.findAllByCart(cart);
@@ -71,24 +73,39 @@ public class Cart_BookService  {
 
     @Transactional
     public void deleteCart_Book(int cart_book_id){
+        Cart_Book cart_book = cart_bookRepository.findById(cart_book_id);
+
+        Cart cart = cart_book.getCart();
 
         cart_bookRepository.deleteCart_BookById(cart_book_id);
+
+        cart.setTotalPriceCart(cart.getTotalPriceCart()-cart_book.getTotalPrice());
     }
 
     @Transactional
     public void updatedCart_Book(int cart_book_id, int quantity){
         Cart_Book cart_book = cart_bookRepository.findById(cart_book_id);
 
+        Cart cart = cart_book.getCart();
+
         cart_book.setQuantity(quantity);
         cart_book.setTotalPrice(quantity*cart_book.getBook().getPrice());
 
+
         cart_bookRepository.save(cart_book);
+
+
+        cartService.changeTotalPriceCart(cart);
+
+
     }
 
 
     @Transactional
     public void clearCart(Cart cart){
         cart_bookRepository.deleteAllByCart(cart);
+
+        cart.setTotalPriceCart(0);
     }
 
 
